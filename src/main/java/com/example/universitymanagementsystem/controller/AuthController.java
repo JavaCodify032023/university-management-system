@@ -6,6 +6,7 @@ import com.example.universitymanagementsystem.dto.response.TokenResponseDto;
 import com.example.universitymanagementsystem.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class AuthController {
 
     @GetMapping("/login")
     @Operation(summary = "Авторизация пользователя")
+    @PermitAll
     public CommonResponseDto<TokenResponseDto> loginUser(@RequestBody LoginRequestDto loginRequestDto){
         CommonResponseDto<TokenResponseDto> responseDto = new CommonResponseDto<>();
 

@@ -8,7 +8,6 @@ import com.example.universitymanagementsystem.service.CandidateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public List<Candidate> getAllActiveByAdmissionId(Long admissionId) {
-        List<Candidate> candidates = candidateRepository.findAllByAdmissionId(admissionId)
+        List<Candidate> candidates = candidateRepository.findAllActiveByAdmissionId(admissionId)
                 .stream()
                 .sorted(Comparator.comparing(Candidate::getTestScore).reversed())
                 .peek(x -> x.setIsRecommended(false))
@@ -42,6 +41,15 @@ public class CandidateServiceImpl implements CandidateService {
         }catch (Exception ex){
             throw new BaseBusinessLogicException("Не удалось добавить кандидата");
         }
+    }
+
+    @Override
+    public List<Candidate> getAllByAdmissionId(Long admissionId) {
+        List<Candidate> allByAdmissionId = candidateRepository.findAllByAdmissionId(admissionId);
+        if(allByAdmissionId.isEmpty()){
+            throw new BaseBusinessLogicException("Не удалось найти кандидатов по набору");
+        }
+        return allByAdmissionId;
     }
 }
 

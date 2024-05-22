@@ -30,33 +30,29 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .httpBasic(Customizer.withDefaults())
-                .cors(cors -> cors.disable())
+        httpSecurity.httpBasic(Customizer.withDefaults())
+                .cors((x) -> x.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable);
         httpSecurity
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/applicant/**").permitAll()
-                        .requestMatchers("/swagger-ui/**","/v3/api-docs").permitAll()
+                        .requestMatchers("/specialty-admission/**").permitAll()
+                        .requestMatchers("/candidate/get-all").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs").permitAll()
                         .requestMatchers("/applicant/register-applicant").permitAll()
                         .requestMatchers("/person/find-by-pn").permitAll()
                         .anyRequest().authenticated());
         httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("*")  // Allow any origin
-//                        .allowCredentials(false)  // Do not allow credentials
-//                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-//                        .allowedHeaders("*");
-//            }
-//        };
-//    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

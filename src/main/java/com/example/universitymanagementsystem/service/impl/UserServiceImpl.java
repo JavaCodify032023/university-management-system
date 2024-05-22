@@ -1,5 +1,7 @@
 package com.example.universitymanagementsystem.service.impl;
 
+import com.example.universitymanagementsystem.entity.User;
+import com.example.universitymanagementsystem.exception.BaseBusinessLogicException;
 import com.example.universitymanagementsystem.repository.UserRepository;
 import com.example.universitymanagementsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +17,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.getByLogin(username);
+    }
+
+    @Override
+    public Long save(User user) {
+        try{
+           return  userRepository.save(user).getId();
+        }catch (Exception ex) {
+            throw new BaseBusinessLogicException("Не удалось сохранить пользователя");
+        }
     }
 }

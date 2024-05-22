@@ -6,6 +6,7 @@ import com.example.universitymanagementsystem.mapper.AdmissionCandidatesResponse
 import com.example.universitymanagementsystem.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class CandidateController {
 
     @Operation(description = "Get candidates to the specialty by admission id.")
     @GetMapping("/get-all")
+    @PermitAll
     public CommonResponseDto<List<AdmissionCandidatesResponseDto>> getCandidates(
             @RequestParam Long admissionId
     ){

@@ -6,6 +6,7 @@ import com.example.universitymanagementsystem.exception.BaseBusinessLogicExcepti
 import com.example.universitymanagementsystem.mapper.PersonDataMapper;
 import com.example.universitymanagementsystem.service.PersonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping("/find-by-pn")
+    @PermitAll
     public CommonResponseDto<PersonDataResponseDto> findByPN(@RequestParam Long pn){
         PersonDataResponseDto personDataResponseDto = personDataMapper
                 .entityToDto(personService.findByPN(pn));

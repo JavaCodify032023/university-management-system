@@ -78,6 +78,15 @@ public class ApplicantApplicationServiceImpl implements ApplicantApplicationServ
         return applicantApplicationsList;
     }
 
+    @Override
+    public List<ApplicantApplication> getByAdmissionId(Long admissionId) {
+        List<ApplicantApplication> allByAdmissionId = applicantApplicationRepository.getAllByAdmissionId(admissionId);
+        if(allByAdmissionId.isEmpty()){
+            throw new BaseBusinessLogicException("Заявления абитуриентов не найдено");
+        }
+        return allByAdmissionId;
+    }
+
     public String generateText(String code,ApplicantApplication applicantApplication){
         if(code.isEmpty() ||
                 applicantApplication.getFirstName().isEmpty() ||

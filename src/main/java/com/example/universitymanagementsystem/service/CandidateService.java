@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface CandidateService {
     List<Candidate> getAllActiveByAdmissionId(Long admissionId);
-
-
-
     Long addCandidate(Candidate candidate);
+    List<Candidate> getAllByAdmissionId(Long admissionId);
 }

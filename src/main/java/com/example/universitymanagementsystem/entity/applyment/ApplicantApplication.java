@@ -70,6 +70,8 @@ public class ApplicantApplication extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    private String gender;
+
     @Column(name = "is_email_activated")
     private Boolean isEmailActivated;
 

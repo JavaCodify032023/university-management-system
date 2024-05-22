@@ -48,7 +48,7 @@ class CandidateServiceImplTest {
         candidateList.add(candidate2);
         candidateList.add(candidate3);
 
-        when(candidateRepository.findAllByAdmissionId(anyLong())).thenReturn(candidateList);
+        when(candidateRepository.findAllActiveByAdmissionId(anyLong())).thenReturn(candidateList);
         List<Candidate> result = candidateService.getAllActiveByAdmissionId(1L);
         assertEquals(3,result.size());
         assertEquals(true,result.get(0).getIsRecommended());
@@ -61,7 +61,7 @@ class CandidateServiceImplTest {
 
     @Test
     void getActive__no_candidates(){
-        when(candidateRepository.findAllByAdmissionId(anyLong())).thenReturn(List.of());
+        when(candidateRepository.findAllActiveByAdmissionId(anyLong())).thenReturn(List.of());
         BaseBusinessLogicException exception =
                 assertThrows(BaseBusinessLogicException.class, () -> candidateService.getAllActiveByAdmissionId(1L));
         assertEquals("Кандидаты отсутствуют",exception.getMessage());

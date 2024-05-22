@@ -8,4 +8,5 @@ public interface ApplicantApplicationService {
     Long registerApplicantApplication(ApplicantApplication app);
     Long saveApp(ApplicantApplication applicantApplication);
     List<ApplicantApplication> getEmailVerifiedApplicants();
+    List<ApplicantApplication> getByAdmissionId(Long admissionId);
 }

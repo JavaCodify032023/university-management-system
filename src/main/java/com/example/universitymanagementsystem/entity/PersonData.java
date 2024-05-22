@@ -15,9 +15,11 @@ public class PersonData extends BaseEntity {
 
     private String email;
 
+    private String telegram;
+
     private String nationality;
 
-    @Column(name = "passport_id",nullable = false)
+    @Column(name = "passport_id")
     private String passportId;
 
     private String country;
@@ -35,4 +37,6 @@ public class PersonData extends BaseEntity {
 
     @Column(name = "last_name")
     private String lastName;
+
+    private String gender;
 }

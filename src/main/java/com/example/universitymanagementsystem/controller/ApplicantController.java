@@ -10,6 +10,7 @@ import com.example.universitymanagementsystem.mapper.RegisterApplicantApplicatio
 import com.example.universitymanagementsystem.service.ApplicantApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class ApplicantController {
 
     @Operation(summary = "Register applicant",description = "Register applicant application without activating.The response is applicant id.")
     @PostMapping("/register-applicant")
+    @PermitAll
     public CommonResponseDto<Long> registerApplicant(@RequestBody RegisterApplicantApplicationDto requestDto) {
         Long id = applicantApplicationService.registerApplicantApplication(
                 registerApplicantApplicationMapper.dtoToEntity(requestDto));
@@ -41,6 +43,7 @@ public class ApplicantController {
 
     @PostMapping(value = "/verify")
     @PreAuthorize("hasAnyRole('ADMISSION_COMMISSION','ADMIN')")
+    @PermitAll
     public CommonResponseDto<Void> verifyApplicantData(
             @RequestBody ApplicantApplicationVerifyRequestDto applicantApplicationVerifyRequestDto
     ) {

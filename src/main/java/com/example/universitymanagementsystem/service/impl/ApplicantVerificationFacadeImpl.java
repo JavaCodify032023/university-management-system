@@ -1,12 +1,15 @@
 package com.example.universitymanagementsystem.service.impl;
 
+import com.example.universitymanagementsystem.entity.PersonData;
 import com.example.universitymanagementsystem.entity.applyment.ApplicantApplication;
 import com.example.universitymanagementsystem.entity.applyment.Candidate;
 import com.example.universitymanagementsystem.exception.BaseBusinessLogicException;
+import com.example.universitymanagementsystem.mapper.EntityToEntityMapper;
 import com.example.universitymanagementsystem.repository.ApplicantApplicationRepository;
 import com.example.universitymanagementsystem.service.ApplicantApplicationService;
 import com.example.universitymanagementsystem.service.ApplicantVerificationFacade;
 import com.example.universitymanagementsystem.service.EmailService;
+import com.example.universitymanagementsystem.service.PersonDataService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,9 +20,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ApplicantVerificationFacadeImpl implements ApplicantVerificationFacade {
     private final CandidateServiceImpl candidateService;
-    private final ApplicantApplicationRepository applicantApplicationRepository;
     private final ApplicantApplicationService applicantApplicationService;
     private final EmailService emailService;
+    private final PersonDataService personDataService;
+
+    private final ApplicantApplicationRepository applicantApplicationRepository;
+
+    private final EntityToEntityMapper mapper;
 
     @Override
     @Transactional
@@ -40,6 +47,9 @@ public class ApplicantVerificationFacadeImpl implements ApplicantVerificationFac
                 .specialtyAdmission(applicantApplication.getSpecialtyAdmission())
                 .build();
         candidateService.addCandidate(candidate);
+
+        PersonData personData = mapper.applicantApplicationToPersonData(applicantApplication);
+        Long personDataId = personDataService.save(personData);
 
         String message = checkingMessage(reason,decision,applicantApplication.getFirstName());
         emailService.sendMessage(applicantApplication.getEmail(),"Заявка на поступление",message);
