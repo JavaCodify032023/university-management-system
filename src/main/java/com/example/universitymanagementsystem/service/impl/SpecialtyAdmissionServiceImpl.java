@@ -33,4 +33,19 @@ public class SpecialtyAdmissionServiceImpl implements SpecialtyAdmissionService 
         }
         return allActiveBySpecId;
     }
+
+    @Override
+    public List<SpecialtyAdmission> createNewAdmission(SpecialtyAdmission specialtyAdmission){
+        List<SpecialtyAdmission> specActive = specialtyAdmissionRepository.getActiveBySpecialtyId(
+                specialtyAdmission.getSpecialty().getId()).orElseThrow(()-> new BaseBusinessLogicException("Некорректный ввод данных"));
+        if(specActive.isEmpty()){
+            try {
+                specActive.add(specialtyAdmissionRepository.save(specialtyAdmission));
+            }catch (Exception e){
+                throw new BaseBusinessLogicException(e.getMessage());
+            }
+        }
+        else throw new BaseBusinessLogicException("Уже есть действующий набор на данную специальность");
+        return specActive;
+    }
 }
