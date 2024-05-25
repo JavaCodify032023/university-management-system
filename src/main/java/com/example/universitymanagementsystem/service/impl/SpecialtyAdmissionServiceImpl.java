@@ -49,15 +49,15 @@ public class SpecialtyAdmissionServiceImpl implements SpecialtyAdmissionService 
             List<SpecialtyAdmission> result = specActive.stream()
                     .filter(x -> x.getGroupCapacity() >= 3)
                     .filter(x -> x.getGroupAmount() >= 1)
-                    .filter(x -> x.getStartDate().isBefore(LocalDateTime.now()))
+                    .filter(x -> x.getStartDate().isAfter(LocalDateTime.now()))
                     .toList();
             if (result.isEmpty()) {
-                throw new BaseBusinessLogicException("Некорректный ввод данные");
+                throw new BaseBusinessLogicException("Некорректный ввод данных");
             }else
                 try {
                 specialtyAdmissionRepository.save(specialtyAdmission);
             }catch (Exception e){
-                throw new BaseBusinessLogicException("Неудалось создать набор");
+                throw new BaseBusinessLogicException("Не удалось создать набор");
             }
         }
         return specActive;
