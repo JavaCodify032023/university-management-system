@@ -1,15 +1,16 @@
 package com.example.universitymanagementsystem.service.impl;
 
 import com.example.universitymanagementsystem.entity.applyment.Candidate;
-import com.example.universitymanagementsystem.exception.CandidateNotFoundException;
+import com.example.universitymanagementsystem.entity.applyment.SpecialtyAdmission;
+import com.example.universitymanagementsystem.exception.BaseBusinessLogicException;
 import com.example.universitymanagementsystem.repository.CandidateRepository;
 import com.example.universitymanagementsystem.service.CandidateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -17,15 +18,30 @@ public class CandidateServiceImpl implements CandidateService {
     private final CandidateRepository candidateRepository;
 
     @Override
-    public List<Candidate> getAllActiveBySpecId(Long specialtyId) throws CandidateNotFoundException {
-        List<Candidate> candidateList = candidateRepository.findAll().stream()
-                .filter(x -> x.getSpecialtyAdmission().getStartDate().isAfter(LocalDateTime.now()))
-                .filter(x -> x.getSpecialtyAdmission().getEndDate().isBefore(LocalDateTime.now()))
-                .filter(x -> x.getSpecialtyAdmission().getSpecialty().getId().equals(specialtyId))
+    public List<Candidate> getAllActiveByAdmissionId(Long admissionId) {
+        List<Candidate> candidates = candidateRepository.findAllByAdmissionId(admissionId)
+                .stream()
+                .sorted(Comparator.comparing(Candidate::getTestScore).reversed())
+                .peek(x -> x.setIsRecommended(false))
                 .toList();
-        if(candidateList.isEmpty()){
-            throw new CandidateNotFoundException("Кандидатов по данному направлению отсутствуют");
+        if(candidates.isEmpty()){
+            throw new BaseBusinessLogicException("Кандидаты отсутствуют");
         }
-        return candidateList;
+        SpecialtyAdmission specialtyAdmission = candidates.get(0).getSpecialtyAdmission();
+        int totalCapacity = specialtyAdmission.getGroupCapacity() * specialtyAdmission.getGroupAmount();
+        for(int i=0;i<totalCapacity && i < candidates.size();i++){
+            candidates.get(i).setIsRecommended(true);
+        }
+        return candidates;
+    }
+
+    @Override
+    public Long addCandidate(Candidate candidate) {
+        try {
+            return candidateRepository.save(candidate).getId();
+        }catch (Exception ex){
+            throw new BaseBusinessLogicException("Не удалось добавить кандидата");
+        }
     }
 }
+

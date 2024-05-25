@@ -13,7 +13,7 @@ public class PersonDataResponseDto {
 
     private String nationality;
 
-    private Long passportId;
+    private String passportId;
 
     private String country;
 

@@ -8,14 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ApplicantApplicationRepository extends JpaRepository<ApplicantApplication,Long> {
-    Optional<ApplicantApplication> findByPersonalNumber(Long pn);
-
-    @Query("select a from applicant_application a where a.isChecked = true")
-    Optional<ApplicantApplication> findByPnWhichIsChecked(Long personalNumber);
-
-    @Query("select a from applicant_application a where a.isChecked = false")
+    @Query("select a from applicant_application a " +
+            "where a.isChecked = false" +
+            " and a.personalNumber = :personalNumber")
     Optional<ApplicantApplication> findByPnWhichIsNonChecked(Long personalNumber);
     @Query("select a from applicant_application a " +
-            "where a.isChecked = false and a.isActivated = true")
+            "where a.isChecked = false and a.isEmailActivated = true")
     List<ApplicantApplication> getAllNonCheckedActivated();
 }

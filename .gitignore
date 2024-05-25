@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### UMS ####
+src/main/resources/application-datasource.properties

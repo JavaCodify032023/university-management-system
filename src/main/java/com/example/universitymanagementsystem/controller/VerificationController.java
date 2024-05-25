@@ -1,6 +1,7 @@
 package com.example.universitymanagementsystem.controller;
 
 import com.example.universitymanagementsystem.dto.request.ApplicantVerificationCodeDto;
+import com.example.universitymanagementsystem.dto.response.CommonResponseDto;
 import com.example.universitymanagementsystem.mapper.ApplicantVerificationCodeMapper;
 import com.example.universitymanagementsystem.mapper.RegisterApplicantApplicationMapper;
 import com.example.universitymanagementsystem.service.VerificationCodeService;
@@ -17,12 +18,8 @@ public class VerificationController {
     private final ApplicantVerificationCodeMapper applicantApplicationMapper;
 
     @PostMapping("/activate-applicant")
-    public String activate(@RequestBody ApplicantVerificationCodeDto verificationCodeDto){
-        try{
-            verificationCodeService.verificateApplicantApplication(applicantApplicationMapper.dtoToEntity(verificationCodeDto));
-            return "Ok";
-        } catch (Exception ex){
-            return "Error";
-        }
+    public CommonResponseDto<Void> activate(@RequestBody ApplicantVerificationCodeDto verificationCodeDto){
+        verificationCodeService.verificateApplicantApplication(applicantApplicationMapper.dtoToEntity(verificationCodeDto));
+        return new CommonResponseDto<Void>().setOk();
     }
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Faculty extends BaseEntity {
+
     private String name;
 
     public Faculty(Long id, String name) {

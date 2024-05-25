@@ -1,13 +1,11 @@
 package com.example.universitymanagementsystem.service;
 
 import com.example.universitymanagementsystem.entity.applyment.ApplicantApplication;
-import com.example.universitymanagementsystem.exception.*;
 
-import javax.mail.MessagingException;
+import java.util.List;
 
 public interface ApplicantApplicationService {
-    Long registerApplicantApplication(ApplicantApplication app) throws
-            ApplicantApplicationAlreadyAppliedException,
-            SpecialtyAdmissionInvalidException,
-            MessagingException;
+    Long registerApplicantApplication(ApplicantApplication app);
+    Long saveApp(ApplicantApplication applicantApplication);
+    List<ApplicantApplication> getEmailVerifiedApplicants();
 }

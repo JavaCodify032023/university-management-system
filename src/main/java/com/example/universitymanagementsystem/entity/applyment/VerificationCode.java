@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 @Entity(name = "verification_code")
 @Data
 public class VerificationCode extends BaseEntity {
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String code;
 
-    @Column(name = "expire_date")
+    @Column(name = "expire_date",nullable = false)
     private LocalDateTime expireDate;
 
-    @Column(name = "applicant_application_id")
+    @Column(name = "applicant_application_id",nullable = false)
     private Long applicantApplicationId;
 
-    @Column(name = "is_applied")
+    @Column(name = "is_applied",nullable = false)
     private Boolean isApplied;
 }

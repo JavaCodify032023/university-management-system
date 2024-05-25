@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor()
 @NoArgsConstructor
 public class Department extends BaseEntity {
+
     private String name;
 
     public Department(Long id, String name) {

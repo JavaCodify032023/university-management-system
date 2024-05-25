@@ -1,59 +1,62 @@
 package com.example.universitymanagementsystem.configuration;
 
-import com.example.universitymanagementsystem.repository.PersonRepository;
-import jakarta.servlet.FilterChain;
+import com.example.universitymanagementsystem.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Properties;
+import java.util.Arrays;
+import java.util.List;
 
-@Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Configuration
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+    private final JwtAuthenticationFilter authenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .httpBasic(Customizer.withDefaults())
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.disable())
                 .csrf(AbstractHttpConfigurer::disable);
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/applicant/**").permitAll()
                         .requestMatchers("/swagger-ui/**","/v3/api-docs").permitAll()
                         .requestMatchers("/applicant/register-applicant").permitAll()
                         .requestMatchers("/person/find-by-pn").permitAll()
                         .anyRequest().authenticated());
+        httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
     }
-
-    @Bean
-    public SmtpSettings smtpSettings() {
-        return new SmtpSettings();
-    }
-
-    @Bean
-    public Properties smtpProperties() {
-        SmtpSettings smtpSettings = smtpSettings();
-
-        Properties props = new Properties();
-        props.put("mail.smtp.host", smtpSettings.getHost());
-        props.put("mail.smtp.socketFactory.port", smtpSettings.getPort());
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", smtpSettings.getPort());
-
-        return props;
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowedOrigins("*")  // Allow any origin
+//                        .allowCredentials(false)  // Do not allow credentials
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+//                        .allowedHeaders("*");
+//            }
+//        };
+//    }
 }

@@ -18,7 +18,7 @@ public class PersonData extends BaseEntity {
     private String nationality;
 
     @Column(name = "passport_id",nullable = false)
-    private Long passportId;
+    private String passportId;
 
     private String country;
 

@@ -1,5 +1,6 @@
 package com.example.universitymanagementsystem.entity;
 
+import com.example.universitymanagementsystem.entity.enums.EmployeeRoleEnum;
 import jakarta.persistence.Entity;
 import lombok.Data;
 

@@ -15,7 +15,9 @@ public interface RegisterApplicantApplicationMapper {
             @Mapping(target = "specialty.id", source = "specialtyId"),
             @Mapping(target = "faculty.id", source = "facultyId"),
             @Mapping(target = "department.id", source = "departmentId"),
-            @Mapping(target = "specialtyAdmission.id", source = "specialtyAdmissionId")
+            @Mapping(target = "specialtyAdmission.id", source = "specialtyAdmissionId"),
+            @Mapping(target = "isEmailActivated", constant = "false"),
+            @Mapping(target = "isChecked", constant = "false")
     })
     ApplicantApplication dtoToEntity(RegisterApplicantApplicationDto dto);
 }
