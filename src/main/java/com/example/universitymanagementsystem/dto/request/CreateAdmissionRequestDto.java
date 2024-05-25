@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -34,13 +34,13 @@ public class CreateAdmissionRequestDto {
     @Schema(description = "Минимальный проходной балл для этого набора", example = "1")
     private Integer minScore;
 
-    @Schema(description = "Дата старта наора", example = "2001-12-12")
+    @Schema(description = "Дата старта наора", example = "2025-07-07T09:11:21")
     @Size(message = "Дата старта не может быть раньше текущей даты")
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    @Schema(description = "Дата окончания набора", example = "2002-12-12")
+    @Schema(description = "Дата окончания набора", example = "2025-07-07T09:11:21")
     @Size(message = "Дата окончания не может быть раньше даты начала")
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     public CreateAdmissionRequestDto() {
     }

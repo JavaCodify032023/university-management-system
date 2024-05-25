@@ -25,5 +25,6 @@ public interface SpecialtyAdmissionRepository extends JpaRepository<SpecialtyAdm
     @Query(value = "select s from specialty_admission s " +
             "where local_datetime between local_datetime and s.endDate " +
             " and s.specialty.id = :specialtyId")
-    Optional<List<SpecialtyAdmission>> getActiveBySpecialtyId(Long specialtyId);
+    List<SpecialtyAdmission> getActiveBySpecialtyId(Long specialtyId);
+
 }

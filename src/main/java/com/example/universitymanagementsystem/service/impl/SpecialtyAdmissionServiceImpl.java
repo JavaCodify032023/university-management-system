@@ -7,7 +7,10 @@ import com.example.universitymanagementsystem.service.SpecialtyAdmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +40,26 @@ public class SpecialtyAdmissionServiceImpl implements SpecialtyAdmissionService 
     @Override
     public List<SpecialtyAdmission> createNewAdmission(SpecialtyAdmission specialtyAdmission){
         List<SpecialtyAdmission> specActive = specialtyAdmissionRepository.getActiveBySpecialtyId(
-                specialtyAdmission.getSpecialty().getId()).orElseThrow(()-> new BaseBusinessLogicException("Некорректный ввод данных"));
-        if(specActive.isEmpty()){
-            try {
-                specActive.add(specialtyAdmissionRepository.save(specialtyAdmission));
+                specialtyAdmission.getSpecialty().getId());
+        if(!specActive.isEmpty()) {
+            throw new BaseBusinessLogicException("Уже существует действующий набор на эту специальнсоть");
+        }else {
+            specActive.add(specialtyAdmission);
+
+            List<SpecialtyAdmission> result = specActive.stream()
+                    .filter(x -> x.getGroupCapacity() >= 3)
+                    .filter(x -> x.getGroupAmount() >= 1)
+                    .filter(x -> x.getStartDate().isBefore(LocalDateTime.now()))
+                    .toList();
+            if (result.isEmpty()) {
+                throw new BaseBusinessLogicException("Некорректный ввод данные");
+            }else
+                try {
+                specialtyAdmissionRepository.save(specialtyAdmission);
             }catch (Exception e){
-                throw new BaseBusinessLogicException(e.getMessage());
+                throw new BaseBusinessLogicException("Неудалось создать набор");
             }
         }
-        else throw new BaseBusinessLogicException("Уже есть действующий набор на данную специальность");
         return specActive;
     }
 }

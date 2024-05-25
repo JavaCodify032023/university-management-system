@@ -4,7 +4,6 @@ import com.example.universitymanagementsystem.dto.request.CreateAdmissionRequest
 import com.example.universitymanagementsystem.dto.response.CommonResponseDto;
 import com.example.universitymanagementsystem.dto.response.FacultyAdmissionResponseDto;
 import com.example.universitymanagementsystem.dto.response.SpecialtyAdmissionResponseDto;
-import com.example.universitymanagementsystem.exception.BaseBusinessLogicException;
 import com.example.universitymanagementsystem.mapper.FacultyAdmissionResponseMapper;
 import com.example.universitymanagementsystem.mapper.SpecialtyAdmissionResponseMapper;
 import com.example.universitymanagementsystem.service.SpecialtyAdmissionService;
@@ -58,16 +57,10 @@ public class AdmissionController {
             @RequestBody CreateAdmissionRequestDto createAdmissionRequestDto
             ){
         CommonResponseDto<List<SpecialtyAdmissionResponseDto>> commonResponseDto = new CommonResponseDto<>();
-        try {
-            commonResponseDto.setOk()
-                    .setMessage("Новый набор объявлен")
-                    .setData(specialtyAdmissionResponseMapper.listEntityToDto(
-                            specialtyAdmissionService.createNewAdmission(
-                                    specialtyAdmissionResponseMapper.dtoToEntity(createAdmissionRequestDto))));
-        } catch (BaseBusinessLogicException e){
-            commonResponseDto.setStatus(400);
-            throw new BaseBusinessLogicException(e.getMessage());
-        }
+        commonResponseDto.setOk()
+                         .setData(specialtyAdmissionResponseMapper.listEntityToDto(
+                                 specialtyAdmissionService.createNewAdmission(
+                                         specialtyAdmissionResponseMapper.dtoToEntity(createAdmissionRequestDto))));
         return commonResponseDto;
     }
 }
