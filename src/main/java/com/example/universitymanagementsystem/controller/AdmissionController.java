@@ -1,6 +1,5 @@
 package com.example.universitymanagementsystem.controller;
 
-import com.example.universitymanagementsystem.dto.request.CreateAdmissionRequestDto;
 import com.example.universitymanagementsystem.dto.response.CommonResponseDto;
 import com.example.universitymanagementsystem.dto.response.FacultyAdmissionResponseDto;
 import com.example.universitymanagementsystem.dto.response.SpecialtyAdmissionResponseDto;
@@ -10,7 +9,10 @@ import com.example.universitymanagementsystem.service.SpecialtyAdmissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,7 @@ public class AdmissionController {
 
     private final SpecialtyAdmissionResponseMapper specialtyAdmissionResponseMapper;
     private final FacultyAdmissionResponseMapper facultyAdmissionResponseMapper;
+
 
     @Operation(summary = "Get faculty admission",description = "Get faculties where specialty admission is available")
     @GetMapping("/get-faculties-admission")
@@ -51,16 +54,4 @@ public class AdmissionController {
                 );
     }
 
-    @Operation(summary = "Create new admission")
-    @PostMapping("/create-new-admission")
-    public CommonResponseDto<List<SpecialtyAdmissionResponseDto>> createNewAdmission(
-            @RequestBody CreateAdmissionRequestDto createAdmissionRequestDto
-            ){
-        CommonResponseDto<List<SpecialtyAdmissionResponseDto>> commonResponseDto = new CommonResponseDto<>();
-        commonResponseDto.setOk()
-                         .setData(specialtyAdmissionResponseMapper.listEntityToDto(
-                                 specialtyAdmissionService.createNewAdmission(
-                                         specialtyAdmissionResponseMapper.dtoToEntity(createAdmissionRequestDto))));
-        return commonResponseDto;
-    }
 }

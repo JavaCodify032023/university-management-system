@@ -7,10 +7,7 @@ import com.example.universitymanagementsystem.service.SpecialtyAdmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,31 +32,5 @@ public class SpecialtyAdmissionServiceImpl implements SpecialtyAdmissionService 
             throw new BaseBusinessLogicException("Набор не объявлены");
         }
         return allActiveBySpecId;
-    }
-
-    @Override
-    public List<SpecialtyAdmission> createNewAdmission(SpecialtyAdmission specialtyAdmission){
-        List<SpecialtyAdmission> specActive = specialtyAdmissionRepository.getActiveBySpecialtyId(
-                specialtyAdmission.getSpecialty().getId());
-        if(!specActive.isEmpty()) {
-            throw new BaseBusinessLogicException("Уже существует действующий набор на эту специальнсоть");
-        }else {
-            specActive.add(specialtyAdmission);
-
-            List<SpecialtyAdmission> result = specActive.stream()
-                    .filter(x -> x.getGroupCapacity() >= 3)
-                    .filter(x -> x.getGroupAmount() >= 1)
-                    .filter(x -> x.getStartDate().isAfter(LocalDateTime.now()))
-                    .toList();
-            if (result.isEmpty()) {
-                throw new BaseBusinessLogicException("Некорректный ввод данных");
-            }else
-                try {
-                specialtyAdmissionRepository.save(specialtyAdmission);
-            }catch (Exception e){
-                throw new BaseBusinessLogicException("Не удалось создать набор");
-            }
-        }
-        return specActive;
     }
 }

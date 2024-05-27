@@ -8,8 +8,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity(name = "specialty_admission")
@@ -41,8 +43,5 @@ public class SpecialtyAdmission extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "department_id",nullable = false)
     private Department department;
-
-    @Column(name = "created_date",nullable = false)
-    private LocalDateTime createdDate;
 
 }
